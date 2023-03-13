@@ -1,1 +1,1 @@
-# 2023-12-Java-MariyaLizneva
+# Java-MariyaLizneva
