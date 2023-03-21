@@ -6,12 +6,14 @@ plugins {
 group '2022-12-Java-MariyaLizneva'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-    mavenLocal()
-}
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
+
+dependencies {
+    implementation 'com.google.guava:guava'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+}
 
 shadowJar {
     manifest {
