@@ -11,8 +11,8 @@ targetCompatibility = JavaVersion.VERSION_17
 
 dependencies {
     implementation 'com.google.guava:guava'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }
 
 shadowJar {
