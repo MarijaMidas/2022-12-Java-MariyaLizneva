@@ -1,0 +1,20 @@
+xmx:
+256m  java.lang.OutOfMemoryError: Java heap space
+2g    spend msec:11511, sec:11
+1g    spend msec:11855, sec:11
+512m  spend msec:12594, sec:12
+3g    spend msec:10192, sec:10
+4g    spend msec:10437, sec:10
+2500m spend msec:9635, sec:9
+2600m spend msec:9696, sec:9
+2400m spend msec:11252, sec:11
+
+After refactor
+256m  spend msec:2337, sec:2
+2g    spend msec:1788, sec:1
+1g    spend msec:1954, sec:1
+3g    spend msec:1659, sec:1
+4g    spend msec:1661, sec:1
+2500m spend msec:1641, sec:1
+2600m spend msec:1705, sec:1
+2400m spend msec:1610, sec:1
