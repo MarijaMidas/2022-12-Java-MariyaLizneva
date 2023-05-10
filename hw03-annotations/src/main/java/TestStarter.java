@@ -5,6 +5,7 @@ import annotation.Test;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.*;
 
 public class TestStarter {
     public static void main(String[] args)throws Exception {
@@ -13,9 +14,9 @@ public class TestStarter {
         int failed = 0;
         var failMethod = new ArrayList<String>();
         Method[] methodsAll = clazz.getDeclaredMethods();
-        ArrayList<Method> methodWithBefore = getMethodBefore(methodsAll,clazz);
-        ArrayList<Method> methodWithAfter = getMethodAfter(methodsAll,clazz);
-        ArrayList<Method> methodWithTest = getMethodTest(methodsAll,clazz);
+        List<Method> methodWithBefore = getMethodBefore(methodsAll,clazz);
+        List<Method> methodWithAfter = getMethodAfter(methodsAll,clazz);
+        List<Method> methodWithTest = getMethodTest(methodsAll,clazz);
        for(var method:methodWithTest) {
            var singleObject = ReflectionHelper.instantiate(MyTest.class);
            for (var methodBefore : methodWithBefore) {
@@ -37,22 +38,24 @@ public class TestStarter {
            System.out.printf(" Test: %d \n Test failed: %d \n Test passed: %d \n", tests, failed, passed);
            failMethod.forEach((s) -> System.out.println("Name failed methods: " + s));
     }
-    private static ArrayList<Method> getMethodBefore(Method[] methodsAll,Class<MyTest> clazz)throws Exception{
-        var methodWithBefore = new ArrayList<Method>();
-        for(Method method:methodsAll) {
-            String methodName = method.getName();
-            Method annotatedMethod = clazz.getMethod(methodName);
-            Annotation[] annotations = annotatedMethod.getDeclaredAnnotations();
-            for (Annotation simple : annotations) {
-                if (simple.annotationType().equals(Before.class)) {
-                    methodWithBefore.add(method);
+
+    private static List<Method> getMethodBefore(Method[] methodsAll,Class<MyTest> clazz)throws Exception{
+        List<Method> methodWithBefore = new ArrayList<>();
+            for(Method method:methodsAll) {
+                String methodName = method.getName();
+                Method annotatedMethod = clazz.getMethod(methodName);
+                Annotation[] annotations = annotatedMethod.getDeclaredAnnotations();
+                for (Annotation simple : annotations) {
+                    if (simple.annotationType().equals(Before.class)) {
+                        methodWithBefore.add(method);
+                    }
                 }
             }
-        }
-        return methodWithBefore;
+            return methodWithBefore;
     }
-    private static ArrayList<Method> getMethodTest(Method[] methodsAll,Class<MyTest> clazz)throws Exception{
-        var methodWithTest = new ArrayList<Method>();
+
+    private static List<Method> getMethodTest(Method[] methodsAll,Class<MyTest> clazz)throws Exception{
+        List<Method> methodWithTest = new ArrayList<>();
                 for(Method method:methodsAll){
                     String methodName = method.getName();
                     Method annotatedMethod = clazz.getMethod(methodName);
@@ -65,7 +68,8 @@ public class TestStarter {
                 }
                 return methodWithTest;
         }
-    private static ArrayList<Method> getMethodAfter(Method[] methodsAll,Class<MyTest> clazz)throws Exception {
+
+    private static List<Method> getMethodAfter(Method[] methodsAll,Class<MyTest> clazz)throws Exception {
         var methodWithAfter = new ArrayList<Method>();
                     for (Method method : methodsAll) {
                         String methodName = method.getName();
