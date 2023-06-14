@@ -1,31 +1,43 @@
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class Case implements CaseInterface {
     private Map<Integer,Cell> allCells = new TreeMap<>();
-    private TreeMap<Integer,Cell> copyAllCells = allCells.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue));
+
     Case(){
         for(Nominal nominal:Nominal.values()){
-            allCells.put(nominal.getNominalValue(),new Cell(nominal));
+            allCells.put(nominal.getNominalValue(),new Cell());
         }
     }
 
-    public Map<Integer, Cell> getMoney(int money) {
-        Map<Integer,Cell> gettingMoney = new TreeMap<>();
+    public Map<Integer, Integer> getMoney(int money) {
+        Map<Integer,Integer> gettingMoney = new TreeMap<>();
 
-        System.out.println(allCells.());
+        Map<Integer,Cell> copyAllCells = allCells.entrySet().stream().map(it-> Map.entry(it.getKey(),new Cell(it.getValue())))
+                .collect(Collectors.toMap(Map.Entry::getKey,Map.Entry::getValue,(oldValue,newValue)->newValue,
+                        TreeMap::new));
 
-        for(Nominal nominal:Nominal.values()){
-            gettingMoney.put(nominal.getNominalValue(),new Cell(nominal));
-        }
-        for(Map.Entry m: copyAllCells.entrySet()){
-            if(money - (Integer) m.getKey()>=0 && ((Cell) m.getValue()).countCell.size()>0){
-                money -= (Integer) m.getKey();
-                ((Cell) m.getValue()).getNominal((Nominal) m.getKey());
+        Map<Integer,Cell> sortedCopyAllCells = new TreeMap<>(copyAllCells).descendingMap();
+
+        for(Map.Entry<Integer,Cell> m: sortedCopyAllCells.entrySet()){
+            int count = 0;
+            while(money>=m.getKey()&&(m.getValue()).countCell.size() > 0) {
+                if (money - m.getKey() >= 0) {
+                    money -= m.getKey();
+                    (m.getValue()).getNominal(Nominal.getNominal(m.getKey()));
+                    count = count + 1;
+                    gettingMoney.put(m.getKey(),count);
+                }
             }
         }
+        if(money>0) {
+            throw new RuntimeException("В банкомате недостаточно купюр для выдачи запрошенной суммы");
+        }
+        allCells = sortedCopyAllCells;
         return gettingMoney;
     }
 

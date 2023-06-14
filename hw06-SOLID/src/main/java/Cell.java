@@ -2,12 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cell implements CellInterface {
-    private Nominal nominalCell;
 
     List<Nominal> countCell = new ArrayList<>();
 
-    Cell(Nominal nominalCell) {
-        this.nominalCell = nominalCell;
+    Cell(Cell cell){
+        countCell = new ArrayList<>(cell.countCell);
+    }
+
+    public Cell() {
     }
 
     public void addNominal(Nominal nominal){

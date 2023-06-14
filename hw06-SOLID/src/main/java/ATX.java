@@ -17,17 +17,18 @@ public class ATX implements ATXInterface {
     }
 
     public void getMoney(int money){
-        if(money%50 == 0){
-            for(Map.Entry m: myCase.getMoney(money).entrySet()){
-                if(((Cell) m.getValue()).countCell.size()!=0) {
-                    System.out.printf("%d по %d рублей", ((Cell) m.getValue()).countCell.size(), m.getKey());
+        if(money%50 == 0 && myCase.getBalance()>=money){
+            for(Map.Entry<Integer,Integer> m: myCase.getMoney(money).entrySet()){
+                if(m.getValue()!=0) {
+                    System.out.println(m.getValue() + " по " + m.getKey() + " рублей.");
                 }
             }
         }
-        else if(getBalance()<money){
+        else if(myCase.getBalance()<money){
             throw new RuntimeException("Введите меньшую сумму");
         }else{
             throw new RuntimeException("Минимальная сумма должна быть кратна 50 руб.");
         }
     }
+
 }

@@ -9,7 +9,9 @@ public class Start {
                 Nominal.FIFTY,
                 Nominal.FIVE_HUNDRED,
                 Nominal.FIVE_HUNDRED,
-                Nominal.ONE_THOUSAND};
+                Nominal.ONE_THOUSAND,
+                Nominal.FIVE_THOUSAND,
+                Nominal.FIVE_THOUSAND};
 
     ATX atx = new ATX();
         List<Nominal> moneys = new ArrayList<>();
@@ -19,6 +21,9 @@ public class Start {
         }
         atx.putMoney(moneys);
         System.out.println(atx.getBalance());
-        atx.getMoney(1500);
+        atx.getMoney(11100);
+        System.out.println(atx.getBalance());
+        atx.getMoney(1000);
+        System.out.println(atx.getBalance());
     }
 }

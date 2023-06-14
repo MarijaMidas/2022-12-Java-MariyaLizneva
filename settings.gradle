@@ -3,4 +3,6 @@ include 'hw01-gradle'
 include 'hw02-generics'
 include 'hw04-GC'
 include 'hw03-annotations'
+include 'hw04-ClassLoader'
+include 'hw06-SOLID'
 

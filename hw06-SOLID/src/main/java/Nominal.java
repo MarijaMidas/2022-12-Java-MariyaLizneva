@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public enum Nominal {
     FIVE_THOUSAND(5000),
@@ -8,7 +9,7 @@ public enum Nominal {
     ONE_HUNDRED(100),
     FIFTY(50);
 
-    private int nominalValue;
+    private final int nominalValue;
 
     Nominal(int nominalValue) {
         this.nominalValue = nominalValue;
@@ -16,5 +17,9 @@ public enum Nominal {
 
     public int getNominalValue() {
         return nominalValue;
+    }
+
+    public static Nominal getNominal(Integer nominalValue){
+        return Arrays.stream(Nominal.values()).filter(it-> it.getNominalValue() == nominalValue).findFirst().get();
     }
 }
