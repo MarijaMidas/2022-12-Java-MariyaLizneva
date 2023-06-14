@@ -1,9 +1,11 @@
 import loger.TestLogging;
+import loger.TestLoggingInterface;
 
 public class Demo {
-    public void action() {
-        new TestLogging().calculation(6);
-        new TestLogging().calculation(10,"Привет");
-        new TestLogging().calculation(1001);
+    public static void main(String[] args) throws Exception {
+        TestLoggingInterface myClass = Ioc.createMyClass();
+        myClass.calculation(6);
+        myClass.calculation(10,"Привет");
+        myClass.calculation(1001);
     }
 }
