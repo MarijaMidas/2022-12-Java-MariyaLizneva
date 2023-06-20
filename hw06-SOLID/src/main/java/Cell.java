@@ -1,26 +1,8 @@
-import java.util.ArrayList;
-import java.util.List;
+public interface Cell {
 
-public class Cell implements CellInterface {
+    void addNominal(Nominal nominal);
 
-    List<Nominal> countCell = new ArrayList<>();
+    void getNominal(Nominal nominal);
 
-    Cell(Cell cell){
-        countCell = new ArrayList<>(cell.countCell);
-    }
-
-    public Cell() {
-    }
-
-    public void addNominal(Nominal nominal){
-        countCell.add(nominal);
-    }
-
-    public void getNominal(Nominal nominal){
-        countCell.remove(nominal);
-    }
-
-    public int quantity() {
-        return countCell.size();
-    }
+    int quantity();
 }

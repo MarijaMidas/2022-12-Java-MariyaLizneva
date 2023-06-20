@@ -20,6 +20,9 @@ public enum Nominal {
     }
 
     public static Nominal getNominal(Integer nominalValue){
-        return Arrays.stream(Nominal.values()).filter(it-> it.getNominalValue() == nominalValue).findFirst().get();
+        return Arrays.stream(Nominal.values())
+                .filter(it-> it.getNominalValue() == nominalValue)
+                .findFirst()
+                .get();
     }
 }
