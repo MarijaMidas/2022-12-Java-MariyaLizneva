@@ -22,6 +22,7 @@ class Ioc {
     static class DemoInvocationHandler implements InvocationHandler {
         private final TestLoggingInterface myClass;
 
+        private static int countMethods = 0;
         DemoInvocationHandler(TestLoggingInterface myClass) {
             this.myClass = myClass;
         }
@@ -29,20 +30,27 @@ class Ioc {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             if(DemoInvocationHandler.isRequired(method)) {
-                System.out.println("executed method:" + method.getName() + " parameter: " + Arrays.toString(args).replaceAll("\\[|\\]", ""));}
+                System.out.println("Method:" + method.getName() + " with parameter: " + Arrays.toString(args).replaceAll("\\[|\\]", ""));}
             return method.invoke(myClass, args);
         }
 
         private static boolean isRequired(Method IocMethod){
             Class<TestLogging> clazzTest = TestLogging.class;
             Method[] methodsAllTest = clazzTest.getDeclaredMethods();
-            for(Method method:methodsAllTest) {
+            if(countMethods == methodsAllTest.length){countMethods = 0;}
+            for(int i = countMethods; i< methodsAllTest.length;) {
+                Method method = methodsAllTest[i];
                 for (Annotation annotation : method.getDeclaredAnnotations()) {
-                    if (annotation.annotationType().equals(Log.class) && method==IocMethod) {
+                    if (annotation.annotationType().equals(Log.class)
+                            && IocMethod.getName().equals(method.getName())) {
+                        countMethods++;
                         return true;
                     }
                 }
+                countMethods++;
+                return false;
             }
+            countMethods++;
             return false;
         }
     }
