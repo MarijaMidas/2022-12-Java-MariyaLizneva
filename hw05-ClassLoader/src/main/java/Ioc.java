@@ -2,7 +2,6 @@ import annotation.Log;
 import loger.TestLogging;
 import loger.TestLoggingInterface;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -21,31 +20,31 @@ class Ioc {
 
     static class DemoInvocationHandler implements InvocationHandler {
         private final TestLoggingInterface myClass;
+        private static Method[] methodsAllTest;
+        private static int countMethods;
 
-        private static int countMethods = 0;
         DemoInvocationHandler(TestLoggingInterface myClass) {
+            countMethods = 0;
             this.myClass = myClass;
+            Class<TestLogging> clazzTest = TestLogging.class;
+            methodsAllTest = clazzTest.getDeclaredMethods();
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if(DemoInvocationHandler.isRequired(method)) {
+            if(DemoInvocationHandler.isRequired(method,methodsAllTest)) {
                 System.out.println("Method:" + method.getName() + " with parameter: " + Arrays.toString(args).replaceAll("\\[|\\]", ""));}
             return method.invoke(myClass, args);
         }
 
-        private static boolean isRequired(Method IocMethod){
-            Class<TestLogging> clazzTest = TestLogging.class;
-            Method[] methodsAllTest = clazzTest.getDeclaredMethods();
+        private static boolean isRequired(Method IocMethod,Method[] methodsAllTest){
             if(countMethods == methodsAllTest.length){countMethods = 0;}
             for(int i = countMethods; i< methodsAllTest.length;) {
                 Method method = methodsAllTest[i];
-                for (Annotation annotation : method.getDeclaredAnnotations()) {
-                    if (annotation.annotationType().equals(Log.class)
-                            && IocMethod.getName().equals(method.getName())) {
-                        countMethods++;
-                        return true;
-                    }
+                if (method.isAnnotationPresent(Log.class)
+                        && IocMethod.getName().equals(method.getName())) {
+                    countMethods++;
+                    return true;
                 }
                 countMethods++;
                 return false;
