@@ -7,5 +7,6 @@ public class Demo {
         myClass.calculation(6);
         myClass.calculation(10,"Привет");
         myClass.calculation(1001);
+        myClass.calculation(50,5000.6451);
     }
 }

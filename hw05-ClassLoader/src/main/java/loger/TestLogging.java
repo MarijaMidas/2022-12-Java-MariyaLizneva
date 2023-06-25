@@ -16,4 +16,8 @@ public class TestLogging implements TestLoggingInterface {
         public void calculation(int param, String param2){
                 System.out.println("Метод без логирования  -  "+param+" "+param2);
         }
+        @Override
+        public void calculation(int param, double param2){
+                System.out.println("Метод без логирования  -  "+param+" "+param2);
+        }
 }
