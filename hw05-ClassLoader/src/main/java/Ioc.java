@@ -26,32 +26,27 @@ class Ioc {
             this.myClass = myClass;
             Class<TestLogging> clazzTest = TestLogging.class;
             var methodsAllTest = clazzTest.getDeclaredMethods();
-            parameterMethodHashSet.addAll(Arrays.asList(methodsAllTest));
+            Class<TestLoggingInterface> clazzInterface = TestLoggingInterface.class;
+            var methodsAllTestInterface = clazzInterface.getDeclaredMethods();
+            for(Method method:methodsAllTest){
+                for(Method interfaceMethod:methodsAllTestInterface) {
+                    if (method.isAnnotationPresent(Log.class)
+                            && interfaceMethod.getName().contains(method.getName())
+                            && Arrays.equals(interfaceMethod.getParameterTypes(), method.getParameterTypes())) {
+                        parameterMethodHashSet.add(interfaceMethod);
+                    }
+                }
+            }
+            for(Method method:parameterMethodHashSet){
+                System.out.println(method.getName());
+            }
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            if(DemoInvocationHandler.isRequired(method,args)) {
+            if(parameterMethodHashSet.contains(method)) {
                 System.out.println("Method:" + method.getName() + " with parameter: " + Arrays.toString(args).replaceAll("\\[|\\]", ""));}
             return method.invoke(myClass, args);
-        }
-
-        private static boolean isRequired(Method iocMethod,Object[] args){
-            for(Method method:parameterMethodHashSet){
-                Parameter[] parameters = method.getParameters();
-            if(method.isAnnotationPresent(Log.class)
-                   && iocMethod.getName().equals(method.getName())
-                   && parameters.length == args.length) {
-                        for (int i = 0; i < parameters.length; i++){
-                            String argsName = (args[i].getClass().getSimpleName()).toLowerCase();
-                            String paramName = parameters[i].getType().toString();
-                            if(argsName.contains(paramName)){
-                                return true;
-                            }
-                        }
-                }
-            }
-            return false;
         }
     }
 }
