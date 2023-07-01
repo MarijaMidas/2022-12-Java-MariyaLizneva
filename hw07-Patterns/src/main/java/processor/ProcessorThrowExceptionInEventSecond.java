@@ -16,7 +16,7 @@ public class ProcessorThrowExceptionInEventSecond implements Processor{
     @Override
     public Message process(Message message) {
         var second = dateTimeProvider.getDate().getSecond();
-        if(second%2 == 0){throw new RuntimeException("ThrowExceptionInEventSecond");};
+        if(second%2 == 0){throw new RuntimeException("ThrowExceptionInEventSecond");}
         return message;
     }
 

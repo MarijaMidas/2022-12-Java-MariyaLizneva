@@ -11,8 +11,8 @@ public class DeepCopyMessage {
 
     public DeepCopyMessage(Message message){
         var copyMessage = new ObjectForMessage();
-        var what = message.getField13().getData();
-        copyMessage.setData(new ArrayList<>(what));
+        var value = message.getField13().getData();
+        copyMessage.setData(new ArrayList<>(value));
         archive = new  Message.Builder(message.getId())
                 .field1(message.getField1())
                 .field2(message.getField2())
