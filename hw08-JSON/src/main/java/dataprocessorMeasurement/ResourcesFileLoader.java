@@ -7,7 +7,6 @@ import model.Measurement;
 import org.checkerframework.common.returnsreceiver.qual.This;
 
 import jakarta.json.Json;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +19,11 @@ public class ResourcesFileLoader implements Loader {
     }
 
     @Override
-    public List<Measurement> load() throws IOException {
-        var list = new ArrayList<Measurement>();
+    public List<Measurement> load() {
+
         try (var json = This.class.getClassLoader().getResourceAsStream(fileName)) {
             JsonReader jsonReader = (JsonReader) Json.createReader(json);
+            var list = new ArrayList<Measurement>();
             System.out.println(jsonReader);
             var gson = new Gson();
             //String json = gson.toJson(jsonReader);
@@ -34,7 +34,8 @@ public class ResourcesFileLoader implements Loader {
                 System.out.println(m.getName()+"__________"+m.getValue());
             }
             return list;
-            //читает файл, парсит и возвращает результат
+        }catch (Exception e){
+            throw new FileProcessException(e);
         }
     }
 }

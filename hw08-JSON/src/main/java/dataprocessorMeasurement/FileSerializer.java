@@ -1,10 +1,8 @@
 package dataprocessorMeasurement;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 public class FileSerializer implements Serializer {
@@ -17,11 +15,12 @@ public class FileSerializer implements Serializer {
     }
 
     @Override
-    public void serialize(Map<String, Double> data) throws FileProcessException, IOException {
-        //формирует результирующий json и сохраняет его в файл
-        Gson gson = new Gson();
-        String json = gson.toJson(data);
+    public void serialize(Map<String, Double> data) {
         var file = new File(fileName);
-        mapper.writeValue(file, json);
+        try {
+            mapper.writeValue(file, data);
+        }catch (Exception e){
+            throw new FileProcessException("Не удалось записать файл");
+        }
     }
 }

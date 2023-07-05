@@ -58,7 +58,6 @@ class ProcessorTest {
         var aggregatedMeasurements = processor.process(fake);
         serializer.serialize(aggregatedMeasurements);
 
-        //then
         AssertionsForClassTypes.assertThat(/*loadedMeasurements*/fake.size()).isEqualTo(9);
         AssertionsForClassTypes.assertThat(aggregatedMeasurements.entrySet().size()).isEqualTo(3);
 
