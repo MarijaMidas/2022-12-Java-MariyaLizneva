@@ -75,7 +75,7 @@ class ComplexProcessorTest {
 
         var message = new Message.Builder(1L).field10("field10").field11("field11").build();
 
-        LocalDateTime time = LocalDateTime.of(2023,06,28,16,14,20);
+        LocalDateTime time = LocalDateTime.of(2023,6,28,16,14,20);
         var timeProvider = new DateTimeProvider() {
             @Override
             public LocalDateTime getDate() {
@@ -87,6 +87,26 @@ class ComplexProcessorTest {
         processor.setDateTimeProvider(timeProvider);
 
         assertThatExceptionOfType(RuntimeException.class).isThrownBy(()->processor.process(message));
+    }
+
+    @Test
+    @DisplayName("Тестирование отсутствие исключения в нечетные секунды выполнения процессора")
+    void handleExceptionNonEventSecondTest(){
+
+        var message = new Message.Builder(1L).field10("field10").field11("field11").build();
+
+        LocalDateTime time = LocalDateTime.of(2023,6,28,16,14,9);
+        var timeProvider = new DateTimeProvider() {
+            @Override
+            public LocalDateTime getDate() {
+                return time;
+            }
+        };
+
+        ProcessorThrowExceptionInEventSecond processor = new ProcessorThrowExceptionInEventSecond();
+        processor.setDateTimeProvider(timeProvider);
+
+        assertThat(processor.process(message)).isInstanceOf(Message.class);
     }
 
     @Test

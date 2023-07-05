@@ -7,20 +7,18 @@ import java.util.*;
 
 public class HistoryListener implements Listener, HistoryReader {
 
-    List<Message> archiveMessages = new ArrayList<>();
+    private final Map<Long,Message> archiveMessages = new TreeMap<>();
 
     @Override
     public void onUpdated(Message msg) {
-        archiveMessages.add(new DeepCopyMessage(msg).archive);
+        archiveMessages.put(msg.getId(), new DeepCopyMessage(msg).archive);
     }
 
     @Override
     public Optional<Message> findMessageById(long id) {
-            for (Message message : archiveMessages) {
-                if (message.getId() == id) {
-                    return Optional.of(message);
-                }
-            }
+        if(archiveMessages.containsKey(id)){
+            return Optional.of(archiveMessages.get(id));
+        }
         return Optional.empty();
     }
 }
