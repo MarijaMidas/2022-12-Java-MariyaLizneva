@@ -5,5 +5,5 @@ include 'hw04-GC'
 include 'hw03-annotations'
 include 'hw05-ClassLoader'
 include 'hw06-SOLID'
+include 'hw07-Patterns'
 include 'hw08-JSON'
-
