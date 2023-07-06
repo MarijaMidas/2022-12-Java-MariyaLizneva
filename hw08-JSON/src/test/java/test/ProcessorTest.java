@@ -1,6 +1,5 @@
 package test;
 
-import model.Measurement;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
@@ -35,30 +33,11 @@ class ProcessorTest {
         var serializer = new FileSerializer(fullOutputFilePath);
 
         //when
-        //var loadedMeasurements = loader.load();
-        var meas1 = new Measurement("val1",0.0);
-        var meas2 = new Measurement("val1",1.0);
-        var meas3 = new Measurement("val1",2.0);
-        var meas4 = new Measurement("val2",0.0);
-        var meas5 = new Measurement("val2",10.0);
-        var meas6 = new Measurement("val2",20.0);
-        var meas7 = new Measurement("val3",10.0);
-        var meas8 = new Measurement("val3",11.0);
-        var meas9 = new Measurement("val3",12.0);
-        var fake = new ArrayList<Measurement>();
-        fake.add(meas1);
-        fake.add(meas2);
-        fake.add(meas3);
-        fake.add(meas4);
-        fake.add(meas5);
-        fake.add(meas6);
-        fake.add(meas7);
-        fake.add(meas8);
-        fake.add(meas9);
-        var aggregatedMeasurements = processor.process(fake);
+        var loadedMeasurements = loader.load();
+        var aggregatedMeasurements = processor.process(loadedMeasurements);
         serializer.serialize(aggregatedMeasurements);
 
-        AssertionsForClassTypes.assertThat(/*loadedMeasurements*/fake.size()).isEqualTo(9);
+        AssertionsForClassTypes.assertThat(loadedMeasurements.size()).isEqualTo(9);
         AssertionsForClassTypes.assertThat(aggregatedMeasurements.entrySet().size()).isEqualTo(3);
 
         var serializedOutput = Files.readString(Paths.get(fullOutputFilePath));

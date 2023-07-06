@@ -1,12 +1,11 @@
 package dataprocessorMeasurement;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import model.Measurement;
-import org.checkerframework.common.returnsreceiver.qual.This;
 
-import jakarta.json.Json;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,19 +20,11 @@ public class ResourcesFileLoader implements Loader {
     @Override
     public List<Measurement> load() {
 
-        try (var json = This.class.getClassLoader().getResourceAsStream(fileName)) {
-            JsonReader jsonReader = (JsonReader) Json.createReader(json);
-            var list = new ArrayList<Measurement>();
-            System.out.println(jsonReader);
+        try (var jsonReader = new JsonReader(new InputStreamReader(ResourcesFileLoader.class.getClassLoader().getResourceAsStream(fileName)))) {
             var gson = new Gson();
-            //String json = gson.toJson(jsonReader);
-            var userListType = new TypeToken<ArrayList<Measurement>>() {}.getType();
-            System.out.println(userListType);
-            list = gson.fromJson(jsonReader, userListType);
-            for(Measurement m:list){
-                System.out.println(m.getName()+"__________"+m.getValue());
-            }
-            return list;
+            var userListType = new TypeToken<ArrayList<Measurement>>() {
+            }.getType();
+            return gson.fromJson(jsonReader, userListType);
         }catch (Exception e){
             throw new FileProcessException(e);
         }
