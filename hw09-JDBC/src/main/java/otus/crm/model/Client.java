@@ -1,6 +1,9 @@
 package otus.crm.model;
 
+import mapper.Id;
+
 public class Client {
+    @Id
     private Long id;
     private String name;
 
