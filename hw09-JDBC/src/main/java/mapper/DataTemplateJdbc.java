@@ -7,6 +7,7 @@ import otus.core.repository.executor.DbExecutor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,24 +32,12 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         return dbExecutor.executeSelect(connection,entitySQLMetaData.getSelectByIdSql(),List.of(id),resultSet -> {
             try{
                 if(resultSet.next()){
-                    var obj = entityClassMetaData.getConstructor().newInstance();
-
-                    Field idField = obj.getClass().getDeclaredField(entityClassMetaData.getIdField().getName());
-                    idField.setAccessible(true);
-                    var columnWithID = resultSet.getMetaData().getColumnLabel(1);
-                    idField.set(obj,resultSet.getObject(columnWithID));
-
-                    for(Field field:entityClassMetaData.getFieldsWithoutId()) {
-                        Field fields = obj.getClass().getDeclaredField(field.getName());
-                        fields.setAccessible(true);
-                        fields.set(obj,resultSet.getObject(field.getName()));
-                    }
-                    return obj;
+                    return getObject(resultSet);
                 }
                 return null;
             }catch (SQLException e) {
                 throw new DataTemplateException(e);
-            }catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e){
+            }catch (Exception e){
             throw new RuntimeException("Невозможно создать объект");
         }
         });
@@ -60,13 +49,13 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             var clientList = new ArrayList<T>();
             try {
                 while (rs.next()) {
-                    long id = rs.getLong(1);
-                    var obj = (T) findById(connection,id);
-                    clientList.add(obj);
+                    clientList.add(getObject(rs));
                 }
                 return clientList;
             } catch (SQLException e) {
                 throw new DataTemplateException(e);
+            } catch (Exception e) {
+                throw new RuntimeException("Невозможно создать объект");
             }
         }).orElseThrow(() -> new RuntimeException("Unexpected error"));
     }
@@ -104,4 +93,21 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             throw new DataTemplateException(e);
         }
     }
+    private T getObject (ResultSet rs) throws Exception{
+        var obj = entityClassMetaData.getConstructor().newInstance();
+
+        Field idField = obj.getClass().getDeclaredField(entityClassMetaData.getIdField().getName());
+        idField.setAccessible(true);
+        var columnWithID = rs.getMetaData().getColumnLabel(1);
+        idField.set(obj,rs.getObject(columnWithID));
+
+        for(Field field:entityClassMetaData.getFieldsWithoutId()) {
+            Field fields = obj.getClass().getDeclaredField(field.getName());
+            fields.setAccessible(true);
+            fields.set(obj,rs.getObject(field.getName()));
+        }
+        return obj;
+    }
+
+
 }

@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.postgresql:postgresql'
     implementation 'com.zaxxer:HikariCP'
+    implementation 'org.checkerframework:checker-qual:3.32.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-engine'
     testImplementation 'org.junit.jupiter:junit-jupiter-params'
