@@ -60,25 +60,13 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             var clientList = new ArrayList<T>();
             try {
                 while (rs.next()) {
-                    var obj = entityClassMetaData.getConstructor().newInstance();
-
-                    Field idField = obj.getClass().getDeclaredField(entityClassMetaData.getIdField().getName());
-                    idField.setAccessible(true);
-                    var columnWithID = rs.getMetaData().getColumnLabel(1);
-                    idField.set(obj,rs.getObject(columnWithID));
-
-                    for(Field field:entityClassMetaData.getFieldsWithoutId()) {
-                        Field fields = obj.getClass().getDeclaredField(field.getName());
-                        fields.setAccessible(true);
-                        fields.set(obj,rs.getObject(field.getName()));
-                    }
-                   clientList.add(obj);
+                    long id = rs.getLong(1);
+                    var obj = (T) findById(connection,id);
+                    clientList.add(obj);
                 }
                 return clientList;
             } catch (SQLException e) {
                 throw new DataTemplateException(e);
-            }catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchFieldException e){
-                throw new RuntimeException("Невозможно создать объект");
             }
         }).orElseThrow(() -> new RuntimeException("Unexpected error"));
     }

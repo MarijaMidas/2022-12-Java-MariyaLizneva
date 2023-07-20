@@ -10,12 +10,14 @@ import java.util.List;
 
 public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T>{
 
-    public Class<T> clazz;
+    private final Field fieldWithID;
+    private final Class<T> clazz;
     private final List<Field> fields;
 
     public EntityClassMetaDataImpl(){
         this.clazz = this.getClassT();
         this.fields = Arrays.asList(clazz.getDeclaredFields());
+        this.fieldWithID = getIdField();
     }
 
     @Override
@@ -51,7 +53,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T>{
     public List<Field> getFieldsWithoutId() {
         var fieldsWithOutId = new ArrayList<Field>();
         for(Field field:fields){
-            if(!(field.isAnnotationPresent(Id.class))){
+            if(field != fieldWithID){
                 fieldsWithOutId.add(field);
             }
         }
