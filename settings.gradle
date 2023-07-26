@@ -8,3 +8,5 @@ include 'hw06-SOLID'
 include 'hw07-Patterns'
 include 'hw08-JSON'
 include 'hw09-JDBC'
+include 'hw10-JPQL'
+
