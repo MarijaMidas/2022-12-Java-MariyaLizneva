@@ -21,23 +21,27 @@ import java.util.List;
 public class Client implements Cloneable {
 
     @Id
-    @SequenceGenerator(name = "client_gen", sequenceName = "client_seq",
-            initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(name = "client_gen", sequenceName = "client_seq", initialValue = 1, allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_gen")
-    @Column(name = "id")
+    @Column(name = "client_id")
     private Long id;
 
-    @Column(name = "name")
+    @Column(name = "client_name")
     private String name;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "id_address")
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name = "address_id_fk")
     private Address address;
+
+//    @EqualsAndHashCode.Exclude
+//    @Fetch(FetchMode.JOIN)
+//    @OneToMany(mappedBy = "client",targetEntity = Phone.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<Phone> phones = new ArrayList<>();
 
     @EqualsAndHashCode.Exclude
     @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "client",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Phone> phones;
+    @OneToMany(mappedBy = "client",targetEntity = Phone.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Phone> phones = new ArrayList<>();
 
     public Client(String name) {
         this.id = null;
@@ -57,6 +61,7 @@ public class Client implements Cloneable {
     }
 
     @Override
+    @SuppressWarnings({"java:S2975", "java:S1182"})
     public Client clone() {
         Client clone;
         try {

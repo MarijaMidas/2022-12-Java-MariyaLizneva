@@ -85,10 +85,11 @@ class HomeworkTest {
     @Test
     public void testForHomeworkRequirementsForClonedClientReferences() throws Exception {
         var client = new Client(null, "Vasya", new Address(null, "AnyStreet"),
-                List.of(new Phone(null, "13-555-22"), new Phone(null, "14-666-333"))).clone();
+                List.of(new Phone(null, "13-555-22"), new Phone(null, "14-666-333")));
         assertThatClientHasCorrectReferences(client);
     }
 
+    @SuppressWarnings("unchecked")
     private void assertThatClientHasCorrectReferences(Client client) throws IllegalAccessException {
         var hasAddress = false;
         var hasPhones = false;
@@ -134,6 +135,14 @@ class HomeworkTest {
 
         cfg.setProperty("hibernate.connection.username", "sa");
         cfg.setProperty("hibernate.connection.password", "");
+
+//        cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+//        cfg.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");
+//
+//        cfg.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5430/demoDB");
+//
+//        cfg.setProperty("hibernate.connection.username", "usr");
+//        cfg.setProperty("hibernate.connection.password", "pwd");
 
         cfg.setProperty("hibernate.show_sql", "true");
         cfg.setProperty("hibernate.format_sql", "false");

@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import app.base.AbstractHibernateTest;
 import app.crm.model.Client;
 
-import java.util.List;
+
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,8 +30,7 @@ class DbServiceClientTest extends AbstractHibernateTest {
 
         //then
         var loadedSavedClient = dbServiceClient.getClient(savedClient.getId());
-        assertThat(loadedSavedClient).isPresent();
-        assertThat(loadedSavedClient.get()).usingRecursiveComparison().isEqualTo(savedClient);
+        assertThat(loadedSavedClient).isPresent().get().usingRecursiveComparison().isEqualTo(savedClient);
 
         //when
         var savedClientUpdated = loadedSavedClient.get().clone();
@@ -39,8 +39,7 @@ class DbServiceClientTest extends AbstractHibernateTest {
 
         //then
         var loadedClient = dbServiceClient.getClient(savedClientUpdated.getId());
-        assertThat(loadedClient).isPresent();
-        assertThat(loadedClient.get()).usingRecursiveComparison().isEqualTo(savedClientUpdated);
+        assertThat(loadedClient).isPresent().get().usingRecursiveComparison().isEqualTo(savedClientUpdated);
         System.out.println(loadedClient);
 
         //when

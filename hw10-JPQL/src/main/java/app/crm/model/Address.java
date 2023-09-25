@@ -12,13 +12,15 @@ import lombok.Setter;
 @Table(name = "address")
 @NoArgsConstructor
 @Entity
+
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @SequenceGenerator(name = "client_gen", sequenceName = "client_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_gen")
+    @Column(name = "address_id")
     private Long id;
 
-    @Column(name = "Street")
+    @Column(name = "address_street")
     private String street;
 
     public Address(Long id,String street){
