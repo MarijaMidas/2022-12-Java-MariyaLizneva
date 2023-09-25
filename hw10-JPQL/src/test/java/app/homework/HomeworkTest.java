@@ -136,14 +136,6 @@ class HomeworkTest {
         cfg.setProperty("hibernate.connection.username", "sa");
         cfg.setProperty("hibernate.connection.password", "");
 
-//        cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
-//        cfg.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");
-//
-//        cfg.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5430/demoDB");
-//
-//        cfg.setProperty("hibernate.connection.username", "usr");
-//        cfg.setProperty("hibernate.connection.password", "pwd");
-
         cfg.setProperty("hibernate.show_sql", "true");
         cfg.setProperty("hibernate.format_sql", "false");
         cfg.setProperty("hibernate.generate_statistics", "true");

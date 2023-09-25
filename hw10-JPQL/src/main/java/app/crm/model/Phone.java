@@ -5,8 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Getter
 @Setter
@@ -16,27 +14,26 @@ import org.hibernate.annotations.FetchMode;
 @Entity
 public class Phone {
     @Id
-    @SequenceGenerator(name = "client_gen", sequenceName = "client_seq", initialValue = 1, allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "client_gen")
+    @SequenceGenerator(name = "phone_gen", sequenceName = "phone_SEQ", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "phone_gen")
     @Column(name = "phone_id")
     private Long id;
 
     @Column(name = "phone_number")
     private String number;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
-
-//    @ManyToOne
-//    @JoinTable(name = "clients", joinColumns= @JoinColumn(name = "client_id"))
-//    private Client client;
 
     public Phone(Long id,String number){
         this.id = id;
         this.number = number;
-
     }
 
-
+    public Phone(Long id,String number,Client client){
+        this.id = id;
+        this.number = number;
+        this.client = client;
+    }
 }

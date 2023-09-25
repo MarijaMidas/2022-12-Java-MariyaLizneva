@@ -1,13 +1,10 @@
 package app.crm.model;
 
-
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,15 +30,10 @@ public class Client implements Cloneable {
     @JoinColumn(name = "address_id_fk")
     private Address address;
 
-//    @EqualsAndHashCode.Exclude
-//    @Fetch(FetchMode.JOIN)
-//    @OneToMany(mappedBy = "client",targetEntity = Phone.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Phone> phones = new ArrayList<>();
-
     @EqualsAndHashCode.Exclude
-    @Fetch(FetchMode.SUBSELECT)
-    @OneToMany(mappedBy = "client",targetEntity = Phone.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Phone> phones = new ArrayList<>();
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Phone> phones;
+
 
     public Client(String name) {
         this.id = null;
@@ -57,19 +49,22 @@ public class Client implements Cloneable {
         this.id = id;
         this.name = name;
         this.address = address;
-        this.phones = phones;
+        List<Phone>allPhones = new ArrayList<>();
+        phones.forEach(e -> allPhones.add(new Phone(e.getId(),e.getNumber(),this)));
+        this.phones = allPhones;
     }
+
 
     @Override
     @SuppressWarnings({"java:S2975", "java:S1182"})
     public Client clone() {
-        Client clone;
+        Client clone = null;
         try {
             clone = (Client) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        clone.setAddress(this.getAddress());
+        clone.setAddress(this.address);
         clone.setPhones(new ArrayList<>(phones));
         return clone;
     }
