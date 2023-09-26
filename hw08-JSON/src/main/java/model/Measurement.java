@@ -1,7 +1,5 @@
 package model;
 
-
-//Допустим, этот класс библиотечный, его нельзя менять
 public final class Measurement {
     private final String name;
     private final double value;
