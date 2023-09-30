@@ -1,5 +1,7 @@
 package app.demo;
 
+import app.crm.model.Address;
+import app.crm.model.Phone;
 import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,7 +10,7 @@ import app.core.repository.HibernateUtils;
 import app.core.sessionmanager.TransactionManagerHibernate;
 import app.crm.dbmigrations.MigrationsExecutorFlyway;
 import app.crm.model.Client;
-import app.crm.service.DbServiceClientImpl;
+import app.crm.service.DbServiceClientCacheImpl;
 
 public class DbServiceDemo {
 
@@ -25,13 +27,13 @@ public class DbServiceDemo {
 
         new MigrationsExecutorFlyway(dbUrl, dbUserName, dbPassword).executeMigrations();
 
-        var sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class);
+        var sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class, Address.class, Phone.class);
 
         var transactionManager = new TransactionManagerHibernate(sessionFactory);
 ///
         var clientTemplate = new DataTemplateHibernate<>(Client.class);
 ///
-        var dbServiceClient = new DbServiceClientImpl(transactionManager, clientTemplate);
+        var dbServiceClient = new DbServiceClientCacheImpl(transactionManager, clientTemplate);
         dbServiceClient.saveClient(new Client("dbServiceFirst"));
 
         var clientSecond = dbServiceClient.saveClient(new Client("dbServiceSecond"));
