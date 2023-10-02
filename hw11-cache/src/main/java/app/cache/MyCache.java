@@ -12,8 +12,10 @@ public class MyCache<K, V> implements Cache<K, V> {
     @Override
     public void put(K key, V value) {
         cache.put(key, value);
-        for (var listener:listeners){
-            listener.notify(key,value," Add");
+        try {for (var listener:listeners){
+            listener.notify(key,value," Add");}
+        }catch (Exception e){
+            System.out.println("Слушателей нет");
         }
     }
 
