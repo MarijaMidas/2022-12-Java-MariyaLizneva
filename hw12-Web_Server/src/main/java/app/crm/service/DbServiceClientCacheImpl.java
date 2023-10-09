@@ -1,0 +1,69 @@
+package app.crm.service;
+
+import app.crm.cache.Cache;
+import app.crm.cache.MyCache;
+import app.crm.dbmigrations.core.repository.DataTemplate;
+import app.crm.dbmigrations.core.sessionmanager.TransactionManager;
+import app.crm.model.Client;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Optional;
+
+public class DbServiceClientCacheImpl implements DBServiceClient {
+    private static final Logger log = LoggerFactory.getLogger(DbServiceClientCacheImpl.class);
+
+    private final DataTemplate<Client> clientDataTemplate;
+    private final TransactionManager transactionManager;
+    private final Cache<String,Client> cache = new MyCache<>();
+
+    public DbServiceClientCacheImpl(TransactionManager transactionManager, DataTemplate<Client> clientDataTemplate) {
+        this.transactionManager = transactionManager;
+        this.clientDataTemplate = clientDataTemplate;
+    }
+
+    @Override
+    public Client saveClient(Client client) {
+        return transactionManager.doInTransaction(session -> {
+            if (client.getId() == null) {
+                var savedClient = clientDataTemplate.insert(session, client);
+                log.info("created client: {}", client);
+                cache.put(getKeyCacheClient(savedClient.getId()),savedClient);
+                return savedClient;
+            }
+            var savedClient = clientDataTemplate.update(session, client);
+            log.info("updated client: {}", savedClient);
+            cache.put(getKeyCacheClient(savedClient.getId()),savedClient);
+            return savedClient;
+        });
+    }
+
+    @Override
+    public Optional<Client> getClient(long id) {
+        if(cache.get(getKeyCacheClient(id))!=null){
+            var clientOptional = Optional.of(cache.get(getKeyCacheClient(id)));
+            log.info("client ex cache: {}", clientOptional);
+            return clientOptional;
+        }
+        return transactionManager.doInReadOnlyTransaction(session -> {
+            var clientOptional = clientDataTemplate.findById(session, id);
+            cache.put(getKeyCacheClient(id),clientOptional.get());
+            log.info("client ex DB: {}", clientOptional);
+            return clientOptional;
+        });
+    }
+
+    @Override
+    public List<Client> findAll() {
+        return transactionManager.doInReadOnlyTransaction(session -> {
+            var clientList = clientDataTemplate.findAll(session);
+            log.info("clientList:{}", clientList);
+            return clientList;
+        });
+    }
+
+    private String getKeyCacheClient(Long id){
+        return id+"";
+    }
+}
