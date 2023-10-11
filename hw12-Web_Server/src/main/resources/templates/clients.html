@@ -32,6 +32,7 @@
 			font-size: 1.2rem;
 		}
     </style>
+
 </head>
 
 <body>
@@ -51,7 +52,7 @@
         <input id="clientPhone" name="clientPhone" type="text" />
     </p>
     <p>
-        <button onclick="addClient()">Добавить</button>
+        <input type="submit" value="Добавить">
     </p>
     </form>
 </div>
@@ -67,12 +68,16 @@
     </tr>
     </thead>
     <tbody>
+    <#list tableClient as client>
     <tr>
-        <td>${tableClient.id}</td>
-        <td>${tableClient.name}</td>
-        <td>${tableClient.address}</td>
-        <td>${tableClient.phones}</td>
+        <td>${client.id}</td>
+        <td>${client.name}</td>
+        <td>${client.address.street}</td>
+        <#list client.phones as phone>
+        <td>${phone.number}</td>
+        </#list>
     </tr>
+    </#list>
     </tbody>
 </table>
 </body>

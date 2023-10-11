@@ -35,7 +35,8 @@ public class ClientServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Map<String, Object> paramsMap = new HashMap<>();
-        dbServiceClient.findAll().forEach(client -> paramsMap.put(TEMPLATE_ATTR_CLIENT, client));
+        List<Client> clients = dbServiceClient.findAll();
+        paramsMap.put(TEMPLATE_ATTR_CLIENT, clients);
         resp.setContentType("text/html");
         resp.getWriter().println(templateProcessor.getPage(CLIENTS_PAGE_TEMPLATE, paramsMap));
     }
@@ -52,5 +53,6 @@ public class ClientServlet extends HttpServlet {
         phone.add(new Phone(null, clientPhone));
         Client client = new Client(null, name, address,phone );
         dbServiceClient.saveClient(client);
+        resp.sendRedirect(req.getContextPath() + "/clients");
     }
 }

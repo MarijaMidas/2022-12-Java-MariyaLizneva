@@ -31,7 +31,7 @@ public class Client implements Cloneable {
     private Address address;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Phone> phones;
 
 
