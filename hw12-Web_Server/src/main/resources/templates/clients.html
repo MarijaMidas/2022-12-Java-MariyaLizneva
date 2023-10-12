@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Пользователи</title>
+    <style>
+		.input-form{
+			border: 1px solid steelblue;
+			width: 36em;
+			padding: 10px;
+			clear:both;
+			text-align: right;
+			font-size: 1.3rem;
+		}
+		label{
+		float:left;
+		}
+		button{
+			display: flex;
+			align-items: center;
+			font-size: 1.2rem;
+		}
+		select{
+			width: 62.5%;
+			border: 1.5px solid steelblue;
+			padding: 8px;
+			font-size: 1.2rem;
+		}
+
+		.edit{
+			border: 1.5px solid steelblue;
+			width: 60%;
+			padding: 8px;
+			font-size: 1.2rem;
+		}
+    </style>
+
+</head>
+
+<body>
+<h2>Загрузить пользователя</h2>
+<div class="input-form">
+    <form action="clients" method="post">
+    <p>
+        <label for="clientName">Имя клиента:</label>
+        <input id="clientName" name="clientName" type="text" />
+    </p>
+    <p>
+        <label for="clientAddress">Адрес клиента:</label>
+        <input id="clientAddress" name="clientAddress" type="text" />
+    </p>
+    <p>
+        <label for="clientPhone">Телефон клиента:</label>
+        <input id="clientPhone" name="clientPhone" type="text" />
+    </p>
+    <p>
+        <input type="submit" value="Добавить">
+    </p>
+    </form>
+</div>
+
+<h2>Список клиентов</h2>
+<table style="width: 400px">
+    <thead>
+    <tr>
+        <td style="width: 50px">Id</td>
+        <td style="width: 150px">Имя</td>
+        <td style="width: 100px">Адрес</td>
+        <td style="width: 100px">Телефон</td>
+    </tr>
+    </thead>
+    <tbody>
+    <#list tableClient as client>
+    <tr>
+        <td>${client.id}</td>
+        <td>${client.name}</td>
+        <td>${client.address.street}</td>
+        <#list client.phones as phone>
+        <td>${phone.number}</td>
+        </#list>
+    </tr>
+    </#list>
+    </tbody>
+</table>
+</body>
+</html>
