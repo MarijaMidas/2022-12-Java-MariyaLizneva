@@ -24,11 +24,12 @@ public class ClientServlet extends HttpServlet {
     private static final String TEMPLATE_ATTR_CLIENT = "tableClient";
 
     private final TemplateProcessor templateProcessor;
-    private final DataTemplate clientTemplate = new DataTemplateHibernate<>(Client.class);;
+    private final DataTemplate clientTemplate;
     private final DbServiceClientCacheImpl dbServiceClient;
 
     public ClientServlet(TemplateProcessor templateProcessor, TransactionManagerHibernate transactionManager) {
         this.templateProcessor = templateProcessor;
+        this.clientTemplate = new DataTemplateHibernate<>(Client.class);
         dbServiceClient = new DbServiceClientCacheImpl(transactionManager, clientTemplate);
     }
 
