@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Пользователи</title>
+    <style type="text/css">
+		button{
+			display: flex;
+			align-items: center;
+			font-size: 1.2rem;
+		}
+		select{
+			width: 62.5%;
+			border: 1.5px solid steelblue;
+			padding: 8px;
+			font-size: 1.2rem;
+		}
+
+		.edit{
+			border: 1.5px solid steelblue;
+			width: 60%;
+			padding: 8px;
+			font-size: 1.2rem;
+		}
+		.clients, .clients td {
+            border: 1px solid lightgray;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+    </style>
+    <style type="text/css" th:inline="text">
+        [[h3]] {
+            background-image: url([[@{/listmark.png}]]);
+            background-repeat: no-repeat;
+            padding: 2px;
+            padding-left: 30px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<h2>Загрузить пользователя</h2>
+<br/>
+<form th:action="@{/clients}" th:object="${client}" th:method="post">
+    <p><label for="name"></label><input type="text" id="name" name="name" placeholder="Введите имя клиента" th:field="*{name}"/></p>
+    <p><label for="address"></label><input type="text" id="address" name="address" placeholder="Введите адрес клиента" th:field="*{address}"/></p>
+    <p><label for="phone"></label><input type="text" id="phone" name="phone" placeholder="Введите телефон клиента" th:field="*{phones}"/></p>
+    <input type="submit" value="Добавить">
+</form>
+<hr/>
+<br/>
+
+<h2>Список клиентов</h2>
+<table class="clients">
+    <thead>
+    <tr>
+        <td >Id</td>
+        <td >Имя</td>
+        <td >Адрес</td>
+        <td >Телефон</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="client : ${clients}">
+        <td th:text="${client.id}">256</td>
+        <td th:text="${client.name}">Tara</td>
+        <td th:text="${client.address">SPB</td>
+        <td><span th:each="phone : ${client.phones}"><div th:text="${phone.number}"></div></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
