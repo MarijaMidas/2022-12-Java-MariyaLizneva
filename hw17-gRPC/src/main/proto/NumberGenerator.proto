@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package protobuf.generated;
+
+option java_multiple_files = true;
+
+message Request {
+    int64 firstValue = 1;
+    int64 lastValue = 2;
+}
+
+message Response {
+    int64 value = 1;
+}
+
+service NumbersService {
+    rpc getNumber(Request) returns (stream Response) {};
+}
