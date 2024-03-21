@@ -5,7 +5,7 @@ spring:
     password: pwd
   flyway:
     enabled: true
-    baselineOnMigrate: true
+#    baselineOnMigrate: true
 
 logging:
   level:

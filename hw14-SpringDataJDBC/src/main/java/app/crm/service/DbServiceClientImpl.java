@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,11 +32,8 @@ public class DbServiceClientImpl implements DBServiceClient {
 
     @Override
     public List<Client> findAll() {
-        return transactionManager.doInTransaction(() -> {
-            var clientList = new ArrayList<Client>();
-            clientRepository.findAll().forEach(clientList::add);
-            log.info("clientList:{}", clientList);
-            return clientList;
-        });
+        var clientList = clientRepository.findAll();
+        log.info("clientList:{}", clientList);
+        return clientList;
     }
 }

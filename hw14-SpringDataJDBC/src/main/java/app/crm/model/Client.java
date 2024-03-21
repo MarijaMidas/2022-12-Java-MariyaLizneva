@@ -1,14 +1,18 @@
 package app.crm.model;
 
+import app.dto.ClientDTO;
 import jakarta.annotation.Nonnull;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.PersistenceCreator;
 import org.springframework.data.relational.core.mapping.MappedCollection;
 import org.springframework.data.relational.core.mapping.Table;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-@Table(name = "clients")
+@Getter
+@Table(name = "client")
 public class Client {
 
     @Id
@@ -17,46 +21,30 @@ public class Client {
     @Nonnull
     private final String name;
 
-    @MappedCollection(idColumn = "clients_id")
+    @MappedCollection(idColumn = "client_key")
     private final Address address;
 
-    @MappedCollection(idColumn = "clients_id")
-    private final List<Phone> phones;
+    @MappedCollection(idColumn = "client_key")
+    private final Set<Phone> phones;
 
 
-    public Client() {
-        this.id = null;
-        this.name = null;
-        this.address = null;
-        this.phones = null;
+    public Client(ClientDTO dto) {
+        this(dto.getId(),
+                dto.getName(),
+                new Address(dto.getAddress()),
+                dto.getPhones().stream().map(Phone::new).collect(Collectors.toSet()));
     }
 
-    public Client(String name, Address address, List<Phone> phones) {
+    public Client(String name, Address address, Set<Phone> phones) {
         this(null, name, address, phones);
     }
 
     @PersistenceCreator
-    public Client(Long id, String name, Address address, List<Phone> phones) {
+    public Client(Long id, String name, Address address, Set<Phone> phones) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.phones = phones;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public List<Phone> getPhones() {
-        return phones;
     }
 
     @Override
