@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>База данных клиентов</title>
+    <meta charset="utf-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+        }
+
+        h4 {
+            color: #333;
+            font-weight: bold;
+            margin-top: 30px;
+        }
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        input[type="submit"] {
+            color: #fff;
+            border: none;
+            text-decoration: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+            background-color: #4CAF50;
+        }
+
+        input[type="submit"]:hover {
+            background-color: rgba(76, 175, 80, 0.8);
+            color: #fff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+
+<body>
+<h4>Добавить нового клиента</h4>
+<form th:action="@{/clients}" th:object="${client}" th:method="post">
+    <p><label for="name"></label><input type="text" id="name" name="name" placeholder="Введите имя клиента" th:field="*{name}"/></p>
+    <p><label for="address"></label><input type="text" id="address" name="address" placeholder="Введите адрес клиента" th:field="*{address}"/></p>
+    <p><label for="phone"></label><input type="text" id="phone" name="phone" placeholder="Введите телефон клиента" th:field="*{phones}"/></p>
+    <p><label for="phone1"></label><input type="text" id="phone1" name="phone" placeholder="Введите дополнительный телефон клиента" th:field="*{phones}"/></p>
+    <input type="submit" value="Добавить">
+</form>
+
+<h4>Список всех клиентов в базе данных</h4>
+<table style="width: 1000px" class="clients">
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Имя</th>
+        <th>Адрес</th>
+        <th>Телефон</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c:${clients}">
+        <td th:text="${c.id}"></td>
+        <td th:text="${c.name}"></td>
+        <td th:text="${c.address}"></td>
+        <td><span th:each="p : ${c.phones}"><div th:text="${p.number}"></div></span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
