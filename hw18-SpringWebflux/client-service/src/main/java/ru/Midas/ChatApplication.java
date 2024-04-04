@@ -1,12 +1,11 @@
-package app;
+package ru.Midas;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class WebServer {
+public class ChatApplication {
     public static void main(String[] args) {
-        SpringApplication.run(WebServer.class,args);
+        SpringApplication.run(ChatApplication.class, args);
     }
 }
